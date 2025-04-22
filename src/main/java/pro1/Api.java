@@ -7,21 +7,17 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class Api {
-
     private static HttpClient client = HttpClient.newBuilder().build();
     private static String baseUrl = "https://stag-demo.uhk.cz/ws/services/rest2";
-    public static String getTeachersByDepartment(String department)
-    {
+    public static String getTeachersByDepartment(String department) {
         return getFromUri(baseUrl+"/ucitel/getUciteleKatedry?outputFormat=JSON&katedra="+department);
     }
 
-    public static String getActionsByDepartment(String department, int year)
-    {
+    public static String getActionsByDepartment(String department, int year) {
         return getFromUri(baseUrl+"/rozvrhy/getRozvrhByKatedra?semestr=%25&outputFormat=JSON&katedra="+department+"&rok="+year);
     }
 
-    private static String getFromUri(String uri)
-    {
+    private static String getFromUri(String uri) {
         try {
             HttpRequest request = HttpRequest.newBuilder().uri(URI.create(uri)).build();
             HttpResponse<String> response = client.send(
@@ -32,5 +28,8 @@ public class Api {
             return null;
         }
     }
-}
 
+    public static String getSpecializations(int year) {
+        return getFromUri(baseUrl+"/prijimacky/getPrijimaciObory?outputFormat=JSON&rok="+year+"&jenAktualni=false");
+    }
+}

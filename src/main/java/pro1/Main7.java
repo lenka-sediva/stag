@@ -2,8 +2,10 @@ package pro1;
 
 import com.google.gson.Gson;
 import pro1.apiDataModel.SpecializationsList;
+
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,10 +21,8 @@ public class Main7 {
         Set<String> seenDates = new HashSet<>(); // ukládá zpracované datumy
 
         return specializations.actions.stream()
-                .map(s -> s.eprDeadlinePrihlaska)
-                .filter(d -> d != null && d.value != null)
-                .map (d -> d.value)
-                .filter(seenDates::add) // přidá datum pouze pokud už není v seenDates
+                .filter(s -> Objects.nonNull(s.eprDeadlinePrihlaska) && seenDates.add(s.eprDeadlinePrihlaska.value))
+                .map(specialization -> specialization.eprDeadlinePrihlaska.value)
                 .sorted(Comparator.comparing((String date) -> {
                     String[] parts = date.split("\\.");
                     int day = Integer.parseInt(parts[0]);
